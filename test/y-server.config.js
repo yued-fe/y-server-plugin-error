@@ -2,7 +2,8 @@
 
 const path = require('path');
 
-const ejsPlugin = require('../../y-server-plugin-ejs/index.js');
+const ejsPlugin = require('y-server-plugin-ejs');
+
 const errorPlugin = require('../index.js');
 
 module.exports = {
