@@ -1,9 +1,9 @@
 {
-  "name": "y-server-plugin-template",
+  "name": "y-server-plugin-error",
   "version": "0.0.1",
   "author": "SmadeyZhang",
   "license": "MIT",
-  "description": "y-server template render plugin",
+  "description": "y-server error handle plugin",
   "main": "index.js",
   "files": [
     "index.js",
