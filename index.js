@@ -32,20 +32,19 @@ module.exports = function (options) {
    * @param {Object} app Express实例
    */
   return function (app) {
-    const render404 = function (req, res, msg) {
+    const handle404 = function (req, res) {
       console.log('[404]'.red, `"${req.path}"`);
 
-      msg = msg || 'Not Found';
-
-      if (views['404']) {
+      const msg = 'Not Found';
+      if (views['404'] && !req.xhr) {
         res.status(404).render(views['404'], { msg: msg });
       } else {
-        res.send(msg);
+        res.status(404).send(msg);
       }
     };
 
     app.use(function (req, res) {
-      render404(req, res);
+      handle404(req, res);
     });
 
     app.use(function (err, req, res, next) {
@@ -53,18 +52,17 @@ module.exports = function (options) {
         err = new Error(`non-error thrown: ${err}`);
       }
 
-      const msg = getErrorMessage(err, req);
-
-      if (err.code === 'ENOENT') {
-        return render404(req, res, msg);
+      if (err.code === 'ENOENT' || err.status === 404) {
+        return handle404(req, res);
       }
 
       console.log('[500]'.red, err.stack);
 
-      if (views['500']) {
+      const msg = getErrorMessage(err, req);
+      if (views['500'] && !req.xhr) {
         res.status(500).render(views['500'], { msg: msg });
       } else {
-        res.send(msg);
+        res.status(500).send(msg);
       }
     });
   };
