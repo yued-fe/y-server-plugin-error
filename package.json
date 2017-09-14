@@ -1,6 +1,6 @@
 {
   "name": "y-server-plugin-error",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "SmadeyZhang",
   "license": "MIT",
   "description": "y-server error handle plugin",
@@ -21,6 +21,6 @@
   },
   "devDependencies": {
     "y-server": "~0.0.1",
-    "y-server-plugin-ejs": "0.0.1"
+    "y-server-plugin-ejs": "0.0.2"
   }
 }
