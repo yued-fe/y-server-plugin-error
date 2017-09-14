@@ -1,6 +1,8 @@
 'use strict';
 require('colors');
 
+const path = require('path');
+
 /**
  * 错误处理插件
  * @param {Object} options 配置
@@ -27,6 +29,10 @@ module.exports = function (options) {
     return req.query.__debug ? err.stack : err.toString();
   };
 
+  const isStaticFile = function (req) {
+    return !!path.extname(req.path);
+  };
+
   /**
    * 插件安装方法
    * @param {Object} app Express实例
@@ -36,10 +42,10 @@ module.exports = function (options) {
       console.log('[404]'.red, `"${req.path}"`);
 
       const msg = 'Not Found';
-      if (views['404'] && !req.xhr) {
-        res.status(404).render(views['404'], { msg: msg });
-      } else {
+      if (req.xhr || !views['404'] || isStaticFile(req)) { // ajax请求或者静态资源直接返回404
         res.status(404).send(msg);
+      } else {
+        res.status(404).render(views['404'], { msg: msg });
       }
     };
 
@@ -59,10 +65,10 @@ module.exports = function (options) {
       console.log('[500]'.red, err.stack);
 
       const msg = getErrorMessage(err, req);
-      if (views['500'] && !req.xhr) {
-        res.status(500).render(views['500'], { msg: msg });
-      } else {
+      if (req.xhr || !views['500']) {
         res.status(500).send(msg);
+      } else {
+        res.status(500).render(views['500'], { msg: msg });
       }
     });
   };
